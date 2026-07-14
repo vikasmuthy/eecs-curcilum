@@ -1,6 +1,6 @@
 # 6.006 — Introduction to Algorithms
 
-**Prerequisites:** 6.100A, 6.042
+**Prerequisites:** 6.100A, 6.001, 6.042
 **Feeds into:** 6.046, 6.033
 
 ## Topics

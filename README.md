@@ -52,14 +52,15 @@ Status values: `not started` / `in progress` / `done`.
 | # | Course | Title | Status |
 |---|--------|-------|--------|
 | 19 | 6.100A | Intro to CS Programming (Python) | not started |
-| 20 | 6.006 | Introduction to Algorithms | not started |
-| 21 | 6.031 | Software Construction | not started |
-| 22 | 6.033 | Computer System Engineering | not started |
-| 23 | 6.046 | Design and Analysis of Algorithms | not started |
-| 24 | 6.830 | Database Systems | not started |
-| 25 | 6.824 | Distributed Systems | not started |
-| 26 | 6.858 | Computer Systems Security | not started |
-| 27 | 6.045 | Theory of Computation | not started |
+| 20 | 6.001 | Structure and Interpretation of Computer Programs | not started |
+| 21 | 6.006 | Introduction to Algorithms | not started |
+| 22 | 6.031 | Software Construction | not started |
+| 23 | 6.033 | Computer System Engineering | not started |
+| 24 | 6.046 | Design and Analysis of Algorithms | not started |
+| 25 | 6.830 | Database Systems | not started |
+| 26 | 6.824 | Distributed Systems | not started |
+| 27 | 6.858 | Computer Systems Security | not started |
+| 28 | 6.045 | Theory of Computation | not started |
 
 ## Layout
 
