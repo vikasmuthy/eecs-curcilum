@@ -229,3 +229,6 @@ Both region formulas agree at the boundary $v_{DS}=v_{GS}-V_T$ (continuity check
 
 ## Used later in
 - [[6.002-circuits-and-electronics/notes/05-amplifiers-large-small-signal-analysis]] — lists this note as a prerequisite, building on the MOSFET piecewise-linear model (specifically the saturation region) to develop amplifiers via large/small-signal analysis.
+- [[6.004-computation-structures/notes/03-cmos-switches-mosfet-abstraction]] — recaps the NMOS switch-level model in full (this note is still `in progress`) and extends it with a symmetric PMOS model to build the CMOS switch abstraction used for digital logic gates.
+- [[6.004-computation-structures/notes/08-bistability-sr-latch]] — reuses the gain-restoring argument (a gate with gain $>1$ in its transition region pushes a degraded signal toward a clean rail) as the physical reason cross-coupled gates snap to one of two digital equilibria instead of settling at an analog compromise voltage.
+- [[6.004-computation-structures/notes/15-clock-skew-static-timing-discipline]] — the static discipline ($V_{OL}\le V_{IL}$, $V_{OH}\ge V_{IH}$) is recapped in full and used as the direct structural template for a timing-domain "static timing discipline" (worst-case setup/hold/skew bounds in place of worst-case voltage bounds).

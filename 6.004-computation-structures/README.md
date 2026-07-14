@@ -8,19 +8,19 @@
 |---|---|
 | Boolean algebra & logic functions | done |
 | Canonical forms & simplification (SOP/POS, K-maps, don't-cares) | done |
-| CMOS switches & the MOSFET-as-switch abstraction | not started |
-| Static CMOS gates (inverter, pull-up/down networks, NAND/NOR, complex gates) | not started |
-| Multiplexers, decoders, encoders | not started |
-| Adders (half/full adder, ripple-carry) and basic arithmetic | not started |
-| Comparators and intro ALUs | not started |
-| Bistability & the SR latch | not started |
-| D latch and the transparency problem | not started |
-| Edge-triggered D flip-flop (master-slave construction) | not started |
-| Moore and Mealy machines — state diagrams & tables | not started |
-| FSM design procedure (state encoding, next-state/output synthesis) | not started |
-| Implementing FSMs with flip-flops + combinational logic | not started |
-| Propagation delay, setup/hold time | not started |
-| Clock skew and the static timing discipline | not started |
+| CMOS switches & the MOSFET-as-switch abstraction | done |
+| Static CMOS gates (inverter, pull-up/down networks, NAND/NOR, complex gates) | done |
+| Multiplexers, decoders, encoders | done |
+| Adders (half/full adder, ripple-carry) and basic arithmetic | done |
+| Comparators and intro ALUs | done |
+| Bistability & the SR latch | done |
+| D latch and the transparency problem | done |
+| Edge-triggered D flip-flop (master-slave construction) | done |
+| Moore and Mealy machines — state diagrams & tables | done |
+| FSM design procedure (state encoding, next-state/output synthesis) | done |
+| Implementing FSMs with flip-flops + combinational logic | done |
+| Propagation delay, setup/hold time | done |
+| Clock skew and the static timing discipline | done |
 | Maximum clock frequency analysis | not started |
 | Register file structure (read/write ports) | not started |
 | Datapath elements & wiring (muxes, ALU, registers) | not started |

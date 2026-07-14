@@ -208,4 +208,7 @@ Every required row matches; rows 12 and 14 (both $D{=}0$) get $\bar D=1$ from th
 **Don't-cares ($d$):** unconstrained rows; assign $0$ or $1$ freely, whichever grows a group larger — never affects correctness, only cost.
 
 ## Used later in
-(none yet)
+- [[6.004-computation-structures/notes/03-cmos-switches-mosfet-abstraction]] — the SOP/POS canonical shapes reappear directly as switch-network topologies: a parallel-of-series switch network realizes an SOP expression, a series-of-parallel network realizes a POS expression.
+- [[6.004-computation-structures/notes/05-multiplexers-decoders-encoders]] — a decoder's outputs are literally the minterms $m_i$ realized as physical gates (one per output), and a MUX's general formula sums minterms of the select lines, each multiplying a data input.
+- [[6.004-computation-structures/notes/06-adders-basic-arithmetic]] — K-map minimization derives the full adder's sum and carry-out expressions from its 8-row truth table, including identifying all three carry-out prime implicants as essential.
+- [[6.004-computation-structures/notes/12-fsm-design-procedure]] — K-map minimization and don't-cares are applied directly, unmodified, to each next-state and output bit of an encoded FSM transition table, with unused state code words supplying the don't-care rows.

@@ -23,7 +23,7 @@ Status values: `not started` / `in progress` / `done`.
 | 8 | 8.02 | Electricity & Magnetism | not started |
 | 9 | 6.002 | Circuits and Electronics | not started |
 | 10 | 6.003 | Signals and Systems | not started |
-| 11 | 6.004 | Computation Structures | not started |
+| 11 | 6.004 | Computation Structures | in progress |
 
 ## Phase 2 — Devices & fields
 

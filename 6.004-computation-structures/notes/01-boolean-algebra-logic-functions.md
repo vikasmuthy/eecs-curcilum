@@ -214,3 +214,5 @@ $F$ matches $A+B$ on all four rows: confirmed. Notice how much shorter perfect i
 
 ## Used later in
 - [[6.004-computation-structures/notes/02-canonical-forms-simplification]] — lists this note as a prerequisite; reuses the Boolean algebra postulates/derived laws directly, and specifically reuses the $XY+X\bar Y=X$ identity (Self-check Question 4) as the algebraic engine behind K-map grouping.
+- [[6.004-computation-structures/notes/03-cmos-switches-mosfet-abstraction]] — reuses AND/OR/NOT and the definition of a literal directly: series switch composition realizes AND, parallel composition realizes OR, and device choice (NMOS vs. PMOS) realizes a literal's complementation.
+- [[6.004-computation-structures/notes/04-static-cmos-gates]] — reuses De Morgan's laws as the algebraic justification for the pull-up network dual-network construction (series$\leftrightarrow$parallel swap plus literal complementation), and the complement laws ($X\bar X=0$, $X+\bar X=1$) to prove the complementary-network condition rules out floating/contention.
