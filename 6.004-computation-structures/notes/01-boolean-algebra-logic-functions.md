@@ -213,4 +213,4 @@ $F$ matches $A+B$ on all four rows: confirmed. Notice how much shorter perfect i
 **Two proof methods:** perfect induction (check all $2^n$ truth-table rows — always valid, but doesn't scale) vs. algebraic manipulation from the postulates (scales to any $n$, and shows *why* a law holds, not just *that* it holds).
 
 ## Used later in
-(none yet)
+- [[6.004-computation-structures/notes/02-canonical-forms-simplification]] — lists this note as a prerequisite; reuses the Boolean algebra postulates/derived laws directly, and specifically reuses the $XY+X\bar Y=X$ identity (Self-check Question 4) as the algebraic engine behind K-map grouping.

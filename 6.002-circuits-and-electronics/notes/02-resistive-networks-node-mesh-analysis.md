@@ -3,7 +3,7 @@ title: "Resistive Networks, Node/Mesh Analysis"
 course: "6.002"
 topic_number: 02
 prerequisites: ["6.002 Topic 01 — Lumped circuit abstraction, KVL/KCL"]
-status: not started
+status: in progress
 ---
 
 # Resistive Networks, Node/Mesh Analysis
@@ -30,6 +30,9 @@ New terms introduced in this note (node and branch are already defined in [[6.00
 - **Mesh analysis (loop analysis)** — a systematic method that takes mesh currents as the unknowns, writes one KVL equation per independent mesh, and solves the resulting linear system.
 - **Independent source** — a voltage or current source whose value is fixed (does not depend on any other voltage/current in the circuit). This note only uses independent sources; dependent sources are introduced in the next topic.
 - **Supernode** — a region formed by merging two non-reference nodes joined by a floating (non-reference-connected) voltage source, used to write a single combined KCL equation when the current through that source is not directly known.
+- **Equivalent resistance ($R_{eq}$)** — the single resistance that, if it replaced a two-terminal network of resistors, would draw (or deliver) the identical current for the identical voltage applied at those two terminals — i.e., the network and the single resistor are indistinguishable from outside the two terminals.
+- **Series combination** — two or more branches connected end-to-end through one or more intermediate nodes that have *no other* connections, so KCL forces the same current through every branch in the chain.
+- **Parallel combination** — two or more branches connected between the *same pair* of nodes, so by the definition of "node" (a single potential) they necessarily share the same voltage.
 
 ## Intuition
 
@@ -42,6 +45,24 @@ Mesh analysis flips it the other way: instead of tracking every node voltage, it
 Which one you should use is a practical choice: node analysis is preferred when there are few nodes (or many voltage sources, which simplify the equations), mesh analysis when there are few meshes (or many current sources). Both methods, done correctly, must give the same final branch currents and voltages — they're just two different choices of unknowns for the same physics.
 
 ## Derivation / formalism
+
+### Equivalent resistance: series and parallel combination
+
+Before the systematic node/mesh procedures below, it's worth formally deriving the ad-hoc technique the "Why this matters" section referenced — series/parallel combination — both to have it precisely stated, and to see exactly why it stops working (motivating the rest of this note).
+
+**Series combination.** Suppose resistors $R_1$ and $R_2$ connect node $A$ to node $B$, and node $B$ to node $C$, respectively, and node $B$ has *no other* branches attached to it. Apply KCL at node $B$: with only two branches present (the one carrying current $i_1$ in from $R_1$, the one carrying current $i_2$ out through $R_2$), KCL gives $i_1 = i_2$. Call this common current $i$. By KVL around the path from $A$ to $C$ (through $B$), the total voltage is the sum of the two branch drops:
+$$v_{AC} = v_{AB} + v_{BC} = iR_1 + iR_2 = i(R_1+R_2)$$
+using Ohm's law on each resistor. A single equivalent resistor $R_{eq}$ carrying the same current $i$ between the same two terminals $A,C$ would, by Ohm's law, have $v_{AC} = iR_{eq}$. Matching this to the expression above (both must equal the same physical $v_{AC}$ for the same $i$):
+$$R_{eq} = R_1+R_2$$
+The same argument applied repeatedly (each new resistor added at a fresh node with no other connections) generalizes to any number of series resistors: $R_{eq} = R_1+R_2+\cdots+R_n$.
+
+**Parallel combination.** Suppose resistors $R_1$ and $R_2$ both connect the *same* two nodes $A$ and $B$. Since a node is, by definition, a single potential, both resistors have the identical voltage across them, $v_{AB}=v$. By Ohm's law, the current through each is $i_1=v/R_1$ and $i_2=v/R_2$. The total current delivered from $A$ to $B$ through this combination (what an external source would have to supply) is, by KCL at node $A$ (or $B$):
+$$i_{total} = i_1+i_2 = \frac{v}{R_1}+\frac{v}{R_2} = v\left(\frac{1}{R_1}+\frac{1}{R_2}\right)$$
+A single equivalent resistor $R_{eq}$ carrying this same total current for the same voltage $v$ would satisfy $i_{total}=v/R_{eq}$ by Ohm's law. Matching:
+$$\frac{1}{R_{eq}} = \frac{1}{R_1}+\frac{1}{R_2}$$
+Again, the same KCL argument generalizes to any number of parallel resistors: $\dfrac{1}{R_{eq}} = \displaystyle\sum_{k=1}^n \dfrac{1}{R_k}$.
+
+**Why this doesn't always work.** Both derivations above depended on a structural fact being true first — "this node has no other connections" (series) or "these two branches share both endpoints" (parallel). Not every resistor network has this property: in a bridge-like network (e.g. Self-check Question 3 below), no single resistor is purely in series or purely in parallel with another. Some nodes in such a network have three or more branches attached, which rules out series combination at those nodes (the "no other connections" requirement fails there); the remaining resistor pairs, even at nodes with only two branches, fail the parallel requirement instead because no two of them share *both* endpoints. Every resistor in the network fails one requirement or the other, so series/parallel reduction has nothing to grab onto anywhere — not a harder version of the same technique, but a structural mismatch. This is exactly the gap node analysis and mesh analysis (below) exist to close: they make no assumption about the network's shape at all.
 
 ### Setup and general procedure — Node analysis
 
@@ -87,7 +108,19 @@ Both methods are different bases for describing the same $B$-dimensional space o
 
 ## Worked examples
 
-### Example 1 — Three-resistor node analysis with one current source
+### Example 1 — Equivalent resistance via series/parallel reduction
+
+**Setup.** Three resistors: $R_1=6\ \Omega$, $R_2=12\ \Omega$, $R_3=4\ \Omega$. $R_2$ and $R_3$ connect the same two nodes (parallel with each other); that combination is in series with $R_1$. Find the equivalent resistance $R_{eq}$ seen at the two outer terminals.
+
+**Step 1 — Combine the parallel pair $R_2, R_3$:**
+$$\frac{1}{R_{23}} = \frac{1}{R_2}+\frac{1}{R_3} = \frac{1}{12}+\frac{1}{4} = \frac{1}{12}+\frac{3}{12} = \frac{4}{12} = \frac{1}{3} \implies R_{23} = 3\ \Omega$$
+
+**Step 2 — Combine that result in series with $R_1$:**
+$$R_{eq} = R_1 + R_{23} = 6+3 = 9\ \Omega$$
+
+**Check, from first principles.** Apply a hypothetical $18\ \text{V}$ across the two outer terminals. Predicted total current: $i = 18/R_{eq} = 18/9 = 2\ \text{A}$. Verify directly: $R_1$ carries the full $2\ \text{A}$ (series), dropping $v_{R_1}=iR_1=2\times6=12\ \text{V}$, leaving $18-12=6\ \text{V}$ across the parallel pair. Then $i_{R_2}=6/12=0.5\ \text{A}$ and $i_{R_3}=6/4=1.5\ \text{A}$; by KCL these must sum back to the total current: $0.5+1.5=2\ \text{A}$ ✓, matching the predicted $i$ exactly.
+
+### Example 2 — Three-resistor node analysis with one current source
 
 **Circuit:** Reference node (ground) at the bottom rail. Node 1 (voltage $v_1$) is connected to node 2 (voltage $v_2$) is connected to ground, forming the following branches:
 - A current source of $I_s = 3\text{ A}$ injects current from ground into node 1.
@@ -131,7 +164,7 @@ Then $v_2 = \dfrac{3(5)}{5} = 3\text{ V}$.
 
 **Check (KCL at node 1):** current in from source $= 3\text{ A}$; current out $= i_{R_1} + i_{R_2} = 2.5 + 0.5 = 3\text{ A}$. Balances. **Check (node 2):** in from $R_2$ = $0.5\text{ A}$; out through $R_3 = 0.5\text{ A}$. Balances.
 
-### Example 2 — Two-mesh circuit with one voltage source
+### Example 3 — Two-mesh circuit with one voltage source
 
 **Circuit (planar, two meshes):** A $10\text{ V}$ independent voltage source (with $+$ terminal on the left) in series with $R_1 = 5\ \Omega$ forms the left branch of mesh 1. Mesh 1 and mesh 2 share a middle branch containing $R_2 = 10\ \Omega$. Mesh 2's outer branch contains $R_3 = 15\ \Omega$. Both mesh currents $i_1$ (mesh 1) and $i_2$ (mesh 2) are defined clockwise.
 
@@ -182,32 +215,41 @@ Then $i_1 = 2.5 \times \dfrac{4}{11} = \dfrac{10}{11} \approx 0.9091\text{ A}$.
 - **Forgetting that a current source constrains a mesh-current *difference*, not an absolute mesh current, when it's on a shared branch.** Only when the current source is on an *outer* (single-mesh) branch does it fix one mesh current outright.
 - **Double-counting or skipping the reference-node KCL equation.** The reference node's own KCL equation is redundant (automatically satisfied given the other $N$), so don't write it as an "extra" independent equation — doing so just reproduces a linear combination of the others and adds no new information, though it also does no harm if you double check with it (as in the "Check" steps above).
 - **Unit mix-ups.** Keep resistances in ohms ($\Omega$), currents in amperes (A), voltages in volts (V) throughout; a stray factor of $1000$ from confusing $\text{k}\Omega$ with $\Omega$ is common when problems are stated with prefixed units.
+- **Trying to force series/parallel reduction on a network where it structurally doesn't apply** (e.g. a bridge network, Self-check Question 3). Series combination requires an intermediate node with *no other* connections; parallel combination requires two branches sharing *both* endpoints. If neither structural condition holds anywhere in the network, no amount of algebraic effort will find a series or parallel pair to combine — that's the signal to switch to node or mesh analysis instead, not a sign you're doing series/parallel reduction wrong.
 
 ## Self-check
 
 ### Questions
 
-1. In node analysis, why does a connected circuit with $N+1$ nodes need exactly $N$ independent KCL equations (not $N+1$)?
-2. A resistor $R = 5\ \Omega$ connects node $a$ ($v_a = 8\text{ V}$) to node $b$ ($v_b = 3\text{ V}$). What is the current flowing from $a$ to $b$ through the resistor?
-3. What is a "supernode," and when must you use one?
-4. In mesh analysis, if mesh 1 (clockwise current $i_1$) and mesh 2 (clockwise current $i_2$) share a branch with resistor $R$, what is the voltage drop across that resistor in the direction of mesh 1's traversal, in terms of $i_1$, $i_2$, and $R$?
-5. Why is mesh analysis, as presented here, restricted to planar circuits, while node analysis is not?
-6. A circuit has a single node (besides ground) with a $2\text{ A}$ current source pushing current into it, and two resistors from that node to ground: $R_1 = 10\ \Omega$ and $R_2 = 10\ \Omega$ in parallel (both directly to ground). Find the node voltage and the current through each resistor.
-7. A single-mesh circuit has a $12\text{ V}$ source in series with $R_1 = 3\ \Omega$ and $R_2 = 9\ \Omega$ (only one mesh, no shared branches). Using mesh analysis, find the mesh current and the voltage across $R_2$.
-8. Suppose in Example 1 (three-resistor circuit) you had instead defined "sum of currents leaving = 0" but forgotten the minus sign on the current source term, writing $+3 + v_1/2 + (v_1-v_2)/4 = 0$ for node 1's equation while keeping node 2's equation the same. Solve this incorrect system for $v_1$ and explain, physically, why the answer must be wrong (i.e., what sign it gets and why that's implausible).
+1. Three resistors $R_1=10\ \Omega$, $R_2=20\ \Omega$, $R_3=30\ \Omega$ are all in series. Find $R_{eq}$.
+2. A network has $R_1=8\ \Omega$ in series with a parallel combination of $R_2=8\ \Omega$ and $R_3=8\ \Omega$. Find $R_{eq}$ at the two outer terminals.
+3. A network has five resistors: $R_1$ connects node $A$ to node $B$; $R_2$ connects node $A$ to node $C$; $R_3$ connects node $B$ to node $D$; $R_4$ connects node $C$ to node $D$; and $R_5$ (the "bridge" resistor) connects node $B$ to node $C$ directly. Explain why no two of these five resistors are purely in series or purely in parallel with each other, identifying which structural requirement from the Derivation section fails at nodes $B$ and $C$.
+4. In node analysis, why does a connected circuit with $N+1$ nodes need exactly $N$ independent KCL equations (not $N+1$)?
+5. A resistor $R = 5\ \Omega$ connects node $a$ ($v_a = 8\text{ V}$) to node $b$ ($v_b = 3\text{ V}$). What is the current flowing from $a$ to $b$ through the resistor?
+6. What is a "supernode," and when must you use one?
+7. In mesh analysis, if mesh 1 (clockwise current $i_1$) and mesh 2 (clockwise current $i_2$) share a branch with resistor $R$, what is the voltage drop across that resistor in the direction of mesh 1's traversal, in terms of $i_1$, $i_2$, and $R$?
+8. Why is mesh analysis, as presented here, restricted to planar circuits, while node analysis is not?
+9. A circuit has a single node (besides ground) with a $2\text{ A}$ current source pushing current into it, and two resistors from that node to ground: $R_1 = 10\ \Omega$ and $R_2 = 10\ \Omega$ in parallel (both directly to ground). Find the node voltage and the current through each resistor.
+10. A single-mesh circuit has a $12\text{ V}$ source in series with $R_1 = 3\ \Omega$ and $R_2 = 9\ \Omega$ (only one mesh, no shared branches). Using mesh analysis, find the mesh current and the voltage across $R_2$.
+11. Suppose in Example 2 (three-resistor circuit) you had instead defined "sum of currents leaving = 0" but forgotten the minus sign on the current source term, writing $+3 + v_1/2 + (v_1-v_2)/4 = 0$ for node 1's equation while keeping node 2's equation the same. Solve this incorrect system for $v_1$ and explain, physically, why the answer must be wrong (i.e., what sign it gets and why that's implausible).
 
 ### Answers
 
-1. Because the sum of *all* currents leaving *all* nodes in the circuit (including the reference node) must be zero by conservation of charge applied to the entire circuit as one region — every branch current appears once as "leaving" one endpoint and once as "entering" the other, so the $N+1$ KCL equations (one per node) always sum to $0=0$ and are therefore not all independent. Any $N$ of them are independent, and the $(N+1)$th is implied. Choosing to omit the reference node's equation is just a convenient choice.
-2. $i_{a\to b} = (v_a - v_b)/R = (8 - 3)/5 = 5/5 = 1\text{ A}$.
-3. A supernode is the combined region formed by merging two nodes that are directly connected by an independent voltage source (when neither of those two nodes is the reference node). You use it because the current through that voltage source isn't given directly by Ohm's law (a voltage source has no fixed resistance), so an ordinary single-node KCL equation can't be written for either node alone; instead you write one KCL equation for the combined region (in which the source's internal current cancels out, since it leaves one node and enters the other within the region) plus the separate constraint $v_a - v_b = V_s$.
-4. The net current through the shared branch in mesh 1's clockwise sense is $i_1 - i_2$ (mesh 2's circulating current passes through that branch in the opposite physical direction relative to mesh 1's convention). By Ohm's law, the voltage drop in mesh 1's traversal direction is $(i_1 - i_2)R$.
-5. Mesh analysis relies on being able to say unambiguously which two meshes (window-panes) border a given branch, so that "shared branch current = difference of the two bordering mesh currents" is well defined. This bordering relationship is only geometrically well-defined when the circuit is drawn with no branch crossing another branch (planar). Node analysis never refers to "which meshes border a branch" — it only uses KCL at nodes, which is well-defined regardless of how the circuit is drawn or whether it's planar.
-6. KCL at the node (leaving = 0, current source term negative since it injects current in): $-2 + v/10 + v/10 = 0 \Rightarrow -2 + 2v/10 = 0 \Rightarrow 2v/10 = 2 \Rightarrow v = 10\text{ V}$. Current through each resistor: $i_{R_1} = i_{R_2} = 10\text{ V}/10\ \Omega = 1\text{ A}$ each (and $1+1=2\text{ A}$ matches the source, confirming KCL).
-7. Single mesh, one equation: traversal direction is a rise through the source ($-12$) then drops $i R_1$ and $i R_2$: $-12 + i(3) + i(9) = 0 \Rightarrow 12i = 12 \Rightarrow i = 1\text{ A}$. Voltage across $R_2$: $v_{R_2} = iR_2 = 1 \times 9 = 9\text{ V}$.
-8. With the sign error, node 1's equation becomes $3 + v_1/2 + (v_1-v_2)/4 = 0$, i.e. multiplying by 4: $12 + 2v_1 + v_1 - v_2 = 0 \Rightarrow 3v_1 - v_2 = -12$ (Equation A'). Node 2's equation is unchanged: $-3v_1 + 5v_2 = 0 \Rightarrow v_2 = 3v_1/5$ (Equation B). Substituting: $3v_1 - 3v_1/5 = -12 \Rightarrow 12v_1/5 = -12 \Rightarrow v_1 = -5\text{ V}$. This is implausible because a current source is *injecting* $3\text{ A}$ of current into a node that only has resistors to ground/other nodes as exits — physically, current flowing into a resistive network from a source should drive that node's voltage in the *positive* direction relative to ground (current flows from high to low potential through a resistor, so if current is flowing out of node 1 through $R_1$ and $R_2$, node 1 must be at higher potential than the nodes it flows into, not negative). Getting $v_1 = -5\text{ V}$ instead of the correct $+5\text{ V}$ is the direct fingerprint of the dropped minus sign on the current-source term — the magnitude is unaffected by this particular sign error, but the overall sign flips, revealing the mistake.
+1. $R_{eq} = R_1+R_2+R_3 = 10+20+30 = 60\ \Omega$ (series resistances simply add, as derived above).
+2. Parallel pair first: $\frac{1}{R_{23}} = \frac{1}{8}+\frac{1}{8} = \frac{2}{8} = \frac{1}{4} \Rightarrow R_{23}=4\ \Omega$. Then series with $R_1$: $R_{eq} = 8+4 = 12\ \Omega$.
+3. At node $B$, three branches meet ($R_1$, $R_3$, $R_5$) — the series requirement (an intermediate node with *no other* connections) fails, so $R_1$ and $R_3$ cannot be combined as series. At node $C$, three branches meet likewise ($R_2$, $R_4$, $R_5$), so $R_2$ and $R_4$ fail the same test. For parallel: no two of the five resistors share *both* endpoints (e.g. $R_1$ spans $A$–$B$ and $R_2$ spans $A$–$C$; they share only node $A$, not both endpoints), so no pair qualifies as parallel either. With neither structural condition satisfied anywhere, series/parallel reduction has nothing to combine, and node or mesh analysis is required.
+4. Because the sum of *all* currents leaving *all* nodes in the circuit (including the reference node) must be zero by conservation of charge applied to the entire circuit as one region — every branch current appears once as "leaving" one endpoint and once as "entering" the other, so the $N+1$ KCL equations (one per node) always sum to $0=0$ and are therefore not all independent. Any $N$ of them are independent, and the $(N+1)$th is implied. Choosing to omit the reference node's equation is just a convenient choice.
+5. $i_{a\to b} = (v_a - v_b)/R = (8 - 3)/5 = 5/5 = 1\text{ A}$.
+6. A supernode is the combined region formed by merging two nodes that are directly connected by an independent voltage source (when neither of those two nodes is the reference node). You use it because the current through that voltage source isn't given directly by Ohm's law (a voltage source has no fixed resistance), so an ordinary single-node KCL equation can't be written for either node alone; instead you write one KCL equation for the combined region (in which the source's internal current cancels out, since it leaves one node and enters the other within the region) plus the separate constraint $v_a - v_b = V_s$.
+7. The net current through the shared branch in mesh 1's clockwise sense is $i_1 - i_2$ (mesh 2's circulating current passes through that branch in the opposite physical direction relative to mesh 1's convention). By Ohm's law, the voltage drop in mesh 1's traversal direction is $(i_1 - i_2)R$.
+8. Mesh analysis relies on being able to say unambiguously which two meshes (window-panes) border a given branch, so that "shared branch current = difference of the two bordering mesh currents" is well defined. This bordering relationship is only geometrically well-defined when the circuit is drawn with no branch crossing another branch (planar). Node analysis never refers to "which meshes border a branch" — it only uses KCL at nodes, which is well-defined regardless of how the circuit is drawn or whether it's planar.
+9. KCL at the node (leaving = 0, current source term negative since it injects current in): $-2 + v/10 + v/10 = 0 \Rightarrow -2 + 2v/10 = 0 \Rightarrow 2v/10 = 2 \Rightarrow v = 10\text{ V}$. Current through each resistor: $i_{R_1} = i_{R_2} = 10\text{ V}/10\ \Omega = 1\text{ A}$ each (and $1+1=2\text{ A}$ matches the source, confirming KCL).
+10. Single mesh, one equation: traversal direction is a rise through the source ($-12$) then drops $i R_1$ and $i R_2$: $-12 + i(3) + i(9) = 0 \Rightarrow 12i = 12 \Rightarrow i = 1\text{ A}$. Voltage across $R_2$: $v_{R_2} = iR_2 = 1 \times 9 = 9\text{ V}$.
+11. With the sign error, node 1's equation becomes $3 + v_1/2 + (v_1-v_2)/4 = 0$, i.e. multiplying by 4: $12 + 2v_1 + v_1 - v_2 = 0 \Rightarrow 3v_1 - v_2 = -12$ (Equation A'). Node 2's equation is unchanged: $-3v_1 + 5v_2 = 0 \Rightarrow v_2 = 3v_1/5$ (Equation B). Substituting: $3v_1 - 3v_1/5 = -12 \Rightarrow 12v_1/5 = -12 \Rightarrow v_1 = -5\text{ V}$. This is implausible because a current source is *injecting* $3\text{ A}$ of current into a node that only has resistors to ground/other nodes as exits — physically, current flowing into a resistive network from a source should drive that node's voltage in the *positive* direction relative to ground (current flows from high to low potential through a resistor, so if current is flowing out of node 1 through $R_1$ and $R_2$, node 1 must be at higher potential than the nodes it flows into, not negative). Getting $v_1 = -5\text{ V}$ instead of the correct $+5\text{ V}$ is the direct fingerprint of the dropped minus sign on the current-source term — the magnitude is unaffected by this particular sign error, but the overall sign flips, revealing the mistake.
 
 ## Summary / cheat sheet
+
+**Equivalent resistance:** series $R_{eq}=R_1+R_2+\cdots+R_n$ (same current forced by KCL at a no-other-connections node); parallel $\dfrac{1}{R_{eq}}=\dfrac{1}{R_1}+\dfrac{1}{R_2}+\cdots+\dfrac{1}{R_n}$ (same voltage forced by sharing both endpoints). Fails to apply — switch to node/mesh analysis — whenever a network has neither structural condition anywhere (e.g. a bridge).
 
 **Node analysis (unknowns: node voltages $v_k$, reference node $= 0\text{ V}$):**
 1. Pick reference node.

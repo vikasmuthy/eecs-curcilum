@@ -28,6 +28,9 @@ Running list of terms/symbols introduced in 6.002 notes, in order of first appea
 - **Mesh analysis (loop analysis)** — systematic method taking mesh currents as unknowns, writing one KVL equation per independent mesh, and solving the resulting linear system.
 - **Independent source** — a voltage or current source whose value is fixed, independent of any other voltage/current in the circuit.
 - **Supernode** — a region formed by merging two non-reference nodes joined by a floating voltage source, used to write one combined KCL equation when the source's own current isn't directly known.
+- **Equivalent resistance ($R_{eq}$)** — the single resistance that would draw/deliver identical current for identical applied voltage as a given two-terminal resistor network.
+- **Series combination** — branches connected end-to-end through a node with no other connections; forces equal current through each (KCL). $R_{eq}=\sum R_k$.
+- **Parallel combination** — branches connected between the same two nodes; forces equal voltage across each (same potential). $1/R_{eq}=\sum 1/R_k$.
 
 ## From [[6.002-circuits-and-electronics/notes/03-dependent-sources-superposition-thevenin-norton]]
 - **Dependent source** — a source (voltage or current) whose value is not fixed but is instead proportional to some other voltage or current elsewhere in the circuit (its "controlling variable"); never zeroed during superposition.

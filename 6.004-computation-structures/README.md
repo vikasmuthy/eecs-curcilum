@@ -7,7 +7,7 @@
 | Topic | Status |
 |---|---|
 | Boolean algebra & logic functions | done |
-| Canonical forms & simplification (SOP/POS, K-maps, don't-cares) | not started |
+| Canonical forms & simplification (SOP/POS, K-maps, don't-cares) | done |
 | CMOS switches & the MOSFET-as-switch abstraction | not started |
 | Static CMOS gates (inverter, pull-up/down networks, NAND/NOR, complex gates) | not started |
 | Multiplexers, decoders, encoders | not started |

@@ -7,7 +7,7 @@
 | Topic | Status |
 |---|---|
 | Lumped circuit abstraction, KVL/KCL | not started |
-| Resistive networks, node/mesh analysis | not started |
+| Resistive networks, node/mesh analysis | in progress |
 | Dependent sources, superposition, Thevenin/Norton | not started |
 | Nonlinear elements, digital abstraction, MOSFET model | not started |
 | Amplifiers: large-signal, small-signal analysis | not started |

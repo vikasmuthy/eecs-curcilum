@@ -21,3 +21,17 @@ Running list of terms/symbols introduced in 6.004 notes, in order of first appea
 - **Idempotent law** — $x+x=x$, $x\cdot x=x$.
 - **Absorption law** — $x+xy=x$, $x(x+y)=x$.
 - **De Morgan's laws** — $\overline{X+Y}=\bar X\bar Y$; $\overline{XY}=\bar X+\bar Y$.
+
+## From [[6.004-computation-structures/notes/02-canonical-forms-simplification]]
+
+- **Minterm ($m_i$)** — a product term with every variable exactly once, uncomplemented iff its bit in index $i$ is 1; $1$ at exactly one row.
+- **Maxterm ($M_i$)** — a sum term with every variable exactly once, uncomplemented iff its bit in index $i$ is 0 (opposite of minterm convention); $0$ at exactly one row; $M_i=\overline{m_i}$.
+- **Canonical SOP (minterm expansion)** — $F=\Sigma m(\text{indices where }F{=}1)$; direct translation of a truth table into an OR of minterms.
+- **Canonical POS (maxterm expansion)** — $F=\Pi M(\text{indices where }F{=}0)$; direct translation into an AND of maxterms.
+- **(General) sum-of-products / product-of-sums** — OR of AND terms / AND of OR terms, not necessarily full minterms/maxterms.
+- **Karnaugh map (K-map)** — grid of truth-table rows in Gray-code order so grid-adjacent cells (with wraparound) differ in exactly one variable.
+- **Gray code** — ordering of binary numbers where consecutive entries differ in exactly one bit.
+- **Implicant** — a product term that is 1 only where $F$ is 1 (never covers a 0-row).
+- **Prime implicant** — an implicant that can't be enlarged (no literal droppable) while remaining valid; largest valid K-map group containing a given cell.
+- **Essential prime implicant** — the only prime implicant covering some particular minterm; must appear in every minimal SOP.
+- **Don't-care ($d$/$\times$)** — an input row with unspecified required output; assignable to 0 or 1 freely during minimization.
